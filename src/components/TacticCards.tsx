@@ -41,9 +41,10 @@ export const TacticCards = ({
       </div>
 
       <div
+        className="tactic-grid"
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))',
           gap: '0.75rem',
         }}
       >

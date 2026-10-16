@@ -28,6 +28,7 @@ export const Navbar = ({
       }}
     >
       <div
+        className="navbar-container"
         style={{
           maxWidth: 1280,
           margin: '0 auto',
@@ -36,64 +37,65 @@ export const Navbar = ({
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '1rem',
+          gap: '0.75rem',
         }}
       >
         {/* Brand & Tagline */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <div
             style={{
-              width: 40,
-              height: 40,
+              width: 38,
+              height: 38,
               borderRadius: 'var(--radius-md)',
               background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '1.25rem',
+              fontSize: '1.2rem',
               fontWeight: 800,
               boxShadow: '0 2px 10px rgba(2, 132, 199, 0.3)',
+              flexShrink: 0,
             }}
           >
             ⏸
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <h1 style={{ fontSize: '1.15rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--color-fg)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
+              <h1 style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--color-fg)' }}>
                 PausePoint
               </h1>
               <span
                 style={{
-                  fontSize: '0.68rem',
+                  fontSize: '0.65rem',
                   fontWeight: 700,
-                  padding: '0.15rem 0.45rem',
+                  padding: '0.12rem 0.4rem',
                   borderRadius: 'var(--radius-pill)',
                   background: 'rgba(2, 132, 199, 0.1)',
                   color: 'var(--color-brand)',
                   border: '1px solid rgba(2, 132, 199, 0.25)',
                 }}
               >
-                THE MANIPULATION DECODER
+                DECODER
               </span>
             </div>
-            <p style={{ fontSize: '0.78rem', color: 'var(--color-fg-muted)', fontWeight: 500 }}>
+            <p className="navbar-tagline" style={{ fontSize: '0.75rem', color: 'var(--color-fg-muted)', fontWeight: 500 }}>
               Pause. Verify. Then act. — <span style={{ opacity: 0.85 }}>Human Firewall Hackathon</span>
             </p>
           </div>
         </div>
 
         {/* Right Action Tools */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+        <div className="navbar-tools" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           {/* Offline & Privacy Badge */}
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.45rem',
+              gap: '0.4rem',
               fontSize: '0.75rem',
               fontWeight: 600,
-              padding: '0.35rem 0.75rem',
+              padding: '0.35rem 0.65rem',
               borderRadius: 'var(--radius-pill)',
               background: 'var(--color-surface-2)',
               border: '1px solid var(--color-border)',
@@ -108,10 +110,11 @@ export const Navbar = ({
                 borderRadius: '50%',
                 background: '#22c55e',
                 boxShadow: '0 0 8px #22c55e',
+                flexShrink: 0,
               }}
             />
-            <WifiOff size={13} style={{ color: 'var(--color-fg-muted)' }} />
-            <span>100% Offline & Private</span>
+            <WifiOff size={13} style={{ color: 'var(--color-fg-muted)', flexShrink: 0 }} />
+            <span className="navbar-privacy-label">Offline & Private</span>
           </div>
 
           {/* Judge Demo Guide Popover Trigger */}

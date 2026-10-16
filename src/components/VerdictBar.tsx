@@ -58,6 +58,7 @@ export const VerdictBar = ({ verdict }: VerdictBarProps) => {
       }}
     >
       <div
+        className="verdict-header"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -78,6 +79,7 @@ export const VerdictBar = ({ verdict }: VerdictBarProps) => {
               justifyContent: 'center',
               boxShadow: 'var(--shadow-sm)',
               color: levelConfig.barColor,
+              flexShrink: 0,
             }}
           >
             <Icon size={26} strokeWidth={2.3} />
@@ -109,6 +111,7 @@ export const VerdictBar = ({ verdict }: VerdictBarProps) => {
 
         {/* Threat Score Gauge */}
         <div
+          className="verdict-score-badge"
           style={{
             display: 'flex',
             alignItems: 'center',

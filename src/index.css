@@ -196,3 +196,86 @@ mark.tactic-highlight:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-fg-muted);
 }
+
+/* ── Mobile Responsive Rules (Screens <= 768px) ── */
+@media (max-width: 768px) {
+  :root {
+    --radius-lg: 14px;
+    --radius-md: 10px;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  .main-container {
+    padding: 0.85rem 0.75rem 2.5rem !important;
+    gap: 1rem !important;
+  }
+
+  .responsive-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .hero-banner {
+    padding: 1rem 1.15rem !important;
+  }
+
+  .hero-headline {
+    font-size: 1.15rem !important;
+  }
+
+  .navbar-container {
+    padding: 0.65rem 0.75rem !important;
+  }
+
+  .navbar-tagline {
+    display: none !important;
+  }
+
+  .navbar-privacy-label {
+    display: none !important;
+  }
+
+  .tactic-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .modal-container {
+    padding: 0.5rem !important;
+  }
+
+  .modal-card {
+    max-height: 96vh !important;
+    border-radius: 14px !important;
+  }
+
+  .verdict-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.6rem !important;
+  }
+
+  .verdict-score-badge {
+    align-self: flex-start !important;
+  }
+
+  .message-action-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+
+  .message-action-group {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  .message-decode-btn {
+    flex: 1 !important;
+    justify-content: center !important;
+    padding: 0.7rem 1rem !important;
+  }
+}
+

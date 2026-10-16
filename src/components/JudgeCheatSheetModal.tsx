@@ -11,6 +11,7 @@ export const JudgeCheatSheetModal = ({ isOpen, onClose }: JudgeCheatSheetModalPr
 
   return (
     <div
+      className="modal-container"
       style={{
         position: 'fixed',
         inset: 0,
@@ -24,6 +25,7 @@ export const JudgeCheatSheetModal = ({ isOpen, onClose }: JudgeCheatSheetModalPr
       }}
     >
       <div
+        className="modal-card"
         style={{
           width: '100%',
           maxWidth: 780,

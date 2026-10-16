@@ -102,6 +102,7 @@ export function App() {
       />
 
       <main
+        className="main-container"
         style={{
           flex: 1,
           maxWidth: 1320,
@@ -115,6 +116,7 @@ export function App() {
       >
         {/* Top Hero Headline Banner */}
         <div
+          className="hero-banner"
           style={{
             padding: '1.25rem 1.5rem',
             borderRadius: 'var(--radius-lg)',
@@ -138,7 +140,7 @@ export function App() {
                 NEP Saarthi Initiative
               </span>
             </div>
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--color-fg)' }}>
+            <h2 className="hero-headline" style={{ fontSize: '1.35rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--color-fg)' }}>
               Unphishable: Exposing your exposure, before hackers do.
             </h2>
             <p style={{ fontSize: '0.85rem', color: 'var(--color-fg-muted)', marginTop: 2 }}>
@@ -180,9 +182,10 @@ export function App() {
 
         {/* Main Two-Column Workbench */}
         <div
+          className="responsive-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
             gap: '1.5rem',
             alignItems: 'start',
           }}

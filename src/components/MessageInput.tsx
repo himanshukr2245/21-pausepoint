@@ -150,6 +150,7 @@ export const MessageInput = ({
 
         {/* Textarea Bottom Action Bar */}
         <div
+          className="message-action-bar"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -186,14 +187,14 @@ export const MessageInput = ({
             )}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div className="message-action-group" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <button
               onClick={handlePaste}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.4rem',
-                padding: '0.45rem 0.85rem',
+                padding: '0.5rem 0.85rem',
                 borderRadius: 'var(--radius-md)',
                 background: 'var(--color-surface)',
                 border: '1px solid var(--color-border)',
@@ -208,6 +209,7 @@ export const MessageInput = ({
             </button>
 
             <button
+              className="message-decode-btn"
               onClick={() => {
                 playTick();
                 onDecode();
@@ -217,7 +219,7 @@ export const MessageInput = ({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.45rem',
-                padding: '0.5rem 1.25rem',
+                padding: '0.55rem 1.25rem',
                 borderRadius: 'var(--radius-md)',
                 background: text.trim() ? 'var(--color-brand)' : 'var(--color-surface-3)',
                 color: text.trim() ? 'var(--color-brand-fg)' : 'var(--color-fg-muted)',
