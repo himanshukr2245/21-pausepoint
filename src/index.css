@@ -1,0 +1,198 @@
+/* PausePoint Design System — HK Universal Library v3 Standard */
+/* Ceramic Pearl Canvas (Light) & OLED Obsidian (Dark) */
+
+:root {
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f5f9;
+  --color-surface-3: #e2e8f0;
+  --color-fg: #0f172a;
+  --color-fg-muted: #64748b;
+  --color-border: rgba(15, 23, 42, 0.1);
+  --color-border-subtle: rgba(15, 23, 42, 0.06);
+
+  --color-brand: #0284c7;
+  --color-brand-fg: #ffffff;
+  --color-cyan: #06b6d4;
+  --color-cyan-glow: rgba(6, 182, 212, 0.25);
+
+  --color-danger: #dc2626;
+  --color-danger-bg: #fef2f2;
+  --color-danger-border: #fecaca;
+  --color-danger-fg: #991b1b;
+
+  --color-warning: #d97706;
+  --color-warning-bg: #fffbeb;
+  --color-warning-border: #fde68a;
+  --color-warning-fg: #92400e;
+
+  --color-success: #16a34a;
+  --color-success-bg: #f0fdf4;
+  --color-success-border: #bbf7d0;
+  --color-success-fg: #166534;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 9999px;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Segoe UI Mono", Menlo, monospace;
+}
+
+[data-theme="dark"] {
+  --color-bg: #07090e;
+  --color-surface: #10141f;
+  --color-surface-2: #161b29;
+  --color-surface-3: #1f2638;
+  --color-fg: #f8fafc;
+  --color-fg-muted: #94a3b8;
+  --color-border: rgba(255, 255, 255, 0.09);
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+
+  --color-brand: #38bdf8;
+  --color-brand-fg: #07090e;
+  --color-cyan: #22d3ee;
+  --color-cyan-glow: rgba(34, 211, 238, 0.25);
+
+  --color-danger: #ef4444;
+  --color-danger-bg: rgba(239, 68, 68, 0.12);
+  --color-danger-border: rgba(239, 68, 68, 0.35);
+  --color-danger-fg: #fca5a5;
+
+  --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.12);
+  --color-warning-border: rgba(245, 158, 11, 0.35);
+  --color-warning-fg: #fde68a;
+
+  --color-success: #22c55e;
+  --color-success-bg: rgba(34, 197, 94, 0.12);
+  --color-success-border: rgba(34, 197, 94, 0.35);
+  --color-success-fg: #86efac;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.7);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100%;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+}
+
+/* ── Manipulation Tactic Color Highlights ── */
+mark.tactic-highlight {
+  padding: 0.12em 0.35em;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: help;
+  display: inline;
+  transition: all 0.15s ease;
+  border-bottom: 2px solid;
+}
+
+mark.tactic-highlight:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+/* Light Theme Markings */
+.t-urgency     { background-color: #fef3c7; color: #92400e; border-color: #f59e0b; }
+.t-fear        { background-color: #fee2e2; color: #991b1b; border-color: #ef4444; }
+.t-authority   { background-color: #dbeafe; color: #1e40af; border-color: #3b82f6; }
+.t-reward      { background-color: #d1fae5; color: #065f46; border-color: #10b981; }
+.t-secrecy     { background-color: #f3e8ff; color: #6b21a8; border-color: #a855f7; }
+.t-credentials { background-color: #ffe4e6; color: #9f1239; border-color: #f43f5e; }
+.t-remote      { background-color: #fce7f3; color: #831843; border-color: #ec4899; }
+.t-payment     { background-color: #ccfbf1; color: #115e59; border-color: #14b8a6; }
+.t-familiarity { background-color: #ffedd5; color: #9a3412; border-color: #f97316; }
+.t-curiosity   { background-color: #ecfccb; color: #3f6212; border-color: #84cc16; }
+.t-scarcity    { background-color: #ede9fe; color: #5b21b6; border-color: #8b5cf6; }
+
+/* Dark Theme Markings */
+[data-theme="dark"] .t-urgency     { background-color: rgba(245, 158, 11, 0.25); color: #fde68a; border-color: #f59e0b; }
+[data-theme="dark"] .t-fear        { background-color: rgba(239, 68, 68, 0.25); color: #fca5a5; border-color: #ef4444; }
+[data-theme="dark"] .t-authority   { background-color: rgba(59, 130, 246, 0.25); color: #93c5fd; border-color: #3b82f6; }
+[data-theme="dark"] .t-reward      { background-color: rgba(16, 185, 129, 0.25); color: #6ee7b7; border-color: #10b981; }
+[data-theme="dark"] .t-secrecy     { background-color: rgba(168, 85, 247, 0.25); color: #d8b4fe; border-color: #a855f7; }
+[data-theme="dark"] .t-credentials { background-color: rgba(244, 63, 94, 0.25); color: #fda4af; border-color: #f43f5e; }
+[data-theme="dark"] .t-remote      { background-color: rgba(236, 72, 153, 0.25); color: #f9a8d4; border-color: #ec4899; }
+[data-theme="dark"] .t-payment     { background-color: rgba(20, 184, 166, 0.25); color: #5eead4; border-color: #14b8a6; }
+[data-theme="dark"] .t-familiarity { background-color: rgba(249, 115, 22, 0.25); color: #fdba74; border-color: #f97316; }
+[data-theme="dark"] .t-curiosity   { background-color: rgba(132, 204, 22, 0.25); color: #bef264; border-color: #84cc16; }
+[data-theme="dark"] .t-scarcity    { background-color: rgba(139, 92, 246, 0.25); color: #c4b5fd; border-color: #8b5cf6; }
+
+/* Breathing animation for pause timer */
+@keyframes breathe {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+.animate-breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* Live dot pulse */
+@keyframes pulseDot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.pulse-green {
+  animation: pulseDot 2s infinite;
+}
+
+/* Glass Card */
+.glass-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(2, 132, 199, 0.3);
+}
+
+[data-theme="dark"] .glass-panel:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-fg-muted);
+}
