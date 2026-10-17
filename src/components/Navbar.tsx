@@ -8,6 +8,7 @@ interface NavbarProps {
   audioMuted: boolean;
   onToggleAudio: () => void;
   onOpenJudgeGuide: () => void;
+  onOpenDrill?: () => void;
   lang: Language;
   onToggleLang: () => void;
 }
@@ -18,6 +19,7 @@ export const Navbar = ({
   audioMuted,
   onToggleAudio,
   onOpenJudgeGuide,
+  onOpenDrill,
   lang,
   onToggleLang,
 }: NavbarProps) => {
@@ -94,6 +96,32 @@ export const Navbar = ({
 
         {/* Right Action Tools */}
         <div className="navbar-tools" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+          {/* 60s Speed Drill Challenge */}
+          {onOpenDrill && (
+            <button
+              onClick={() => {
+                playTick();
+                onOpenDrill();
+              }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                padding: '0.4rem 0.75rem',
+                borderRadius: 'var(--radius-md)',
+                background: 'rgba(239, 68, 68, 0.12)',
+                color: 'var(--color-danger-fg)',
+                border: '1px solid rgba(239, 68, 68, 0.35)',
+                cursor: 'pointer',
+              }}
+              title="Test your reflex: 60-Second Scam or Legit speed drill"
+            >
+              <span>⚡ {lang === 'hi' ? '60s टेस्ट' : '60s Drill'}</span>
+            </button>
+          )}
+
           {/* Language Switcher */}
           <button
             onClick={() => {

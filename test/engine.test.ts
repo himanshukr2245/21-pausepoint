@@ -118,3 +118,14 @@ test('genuine messages stay low: bank OTP that says "do not share", delivery upd
   ]) assert.equal(decode(t).playbooks.length, 0, t);
   assert.ok(decode('Sir please share the OTP you received to complete verification').playbooks.some((p) => p.id === 'otp'));
 });
+
+test('adult and illegal gambling domains are accurately categorized', () => {
+  const adult = analyzeLink('https://pornhub.com');
+  assert.ok(adult.flags.some((f) => f.flag === 'adult-content'));
+  assert.ok(adult.risk >= 40);
+
+  const gambling = analyzeLink('https://mahadev-book-login.online');
+  assert.ok(gambling.flags.some((f) => f.flag === 'illegal-gambling'));
+  assert.ok(gambling.risk >= 40);
+});
+

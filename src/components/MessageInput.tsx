@@ -9,7 +9,7 @@ import { VoiceTranscriber } from './VoiceTranscriber';
 interface MessageInputProps {
   text: string;
   onChange: (val: string) => void;
-  onDecode: () => void;
+  onDecode: (overrideText?: string) => void;
   onSelectSample: (sample: SampleMessage) => void;
   lang?: Language;
 }
@@ -31,7 +31,10 @@ export const MessageInput = ({
     playTick();
     try {
       const clip = await navigator.clipboard.readText();
-      if (clip) onChange(clip);
+      if (clip) {
+        onChange(clip);
+        onDecode(clip);
+      }
     } catch {
       // Ignore clipboard permission refusal
     }
@@ -47,20 +50,19 @@ export const MessageInput = ({
     const formatted = `Please inspect this link: ${targetUrl.trim()}`;
     onChange(formatted);
     setActiveTab('text');
-    // Trigger decode
-    setTimeout(() => onDecode(), 50);
+    onDecode(formatted);
   };
 
   const handleOcrExtracted = (extracted: string) => {
     onChange(extracted);
     setActiveTab('text');
-    setTimeout(() => onDecode(), 50);
+    onDecode(extracted);
   };
 
   const handleVoiceTranscribed = (transcript: string) => {
     onChange(transcript);
     setActiveTab('text');
-    setTimeout(() => onDecode(), 50);
+    onDecode(transcript);
   };
 
   const QUICK_SCAM_LINKS = [

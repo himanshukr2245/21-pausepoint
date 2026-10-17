@@ -378,6 +378,40 @@ export const DANGEROUS_DOMAIN_KEYWORDS = [
   'blackhat',
 ];
 
+// Adult, NSFW & Sextortion gateway keywords (restricted under DoT IT Act Sec 69A in India)
+export const ADULT_DOMAIN_KEYWORDS = [
+  'porn',
+  'pornhub',
+  'xvideos',
+  'xnxx',
+  'xhamster',
+  'redtube',
+  'onlyfans',
+  'chaturbate',
+  'camgirl',
+  'stripchat',
+  'nude',
+  'erotic',
+  'sexvideo',
+];
+
+// Illegal Online Betting, Gambling & Color Prediction platforms (prohibited in India)
+export const GAMBLING_DOMAIN_KEYWORDS = [
+  'mahadev',
+  '1xbet',
+  'bet365',
+  'parimatch',
+  'colorprediction',
+  'aviator',
+  'winzo',
+  'rummy',
+  'teenpatti',
+  'casino',
+  'betting',
+  'satta',
+  'matka',
+];
+
 // Keywords commonly used in unverified phishing domains to fool victims
 export const SUSPICIOUS_DOMAIN_KEYWORDS = [
   'kyc',
@@ -512,6 +546,30 @@ export function analyzeLink(raw: string): LinkReport {
         'suspicious-domain-keyword',
         `Unverified domain contains credential/financial bait keyword: "${suspWord}"`,
         35
+      );
+    }
+
+    // Adult / Explicit / Sextortion gateway detection
+    const adultWord = ADULT_DOMAIN_KEYWORDS.find(
+      (w) => host.includes(w) || u.pathname.toLowerCase().includes(w)
+    );
+    if (adultWord) {
+      f(
+        'adult-content',
+        `Contains adult/explicit keyword "${adultWord}" — high correlation with video call extortion, sextortion blackmail, and restricted under DoT IT Act Sec 69A in India`,
+        45
+      );
+    }
+
+    // Illegal Online Betting / Gambling platforms
+    const betWord = GAMBLING_DOMAIN_KEYWORDS.find(
+      (w) => host.includes(w) || u.pathname.toLowerCase().includes(w)
+    );
+    if (betWord) {
+      f(
+        'illegal-gambling',
+        `Online betting/gambling vector ("${betWord}") — prohibited under Public Gambling Act & Section 69A IT Act; frequent vehicle for deposit freeze frauds`,
+        40
       );
     }
   }

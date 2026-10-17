@@ -14,6 +14,7 @@ import { LinkXray } from './components/LinkXray';
 import { VerifyLadder } from './components/VerifyLadder';
 import { PauseGate } from './components/PauseGate';
 import { JudgeCheatSheetModal } from './components/JudgeCheatSheetModal';
+import { CognitiveImmunityDrillModal } from './components/CognitiveImmunityDrillModal';
 import { Sparkles, History } from 'lucide-react';
 
 export function App() {
@@ -24,6 +25,7 @@ export function App() {
   const [verdict, setVerdict] = useState<Verdict>(() => decode(SAMPLE_MESSAGES[0].text));
   const [selectedTactic, setSelectedTactic] = useState<string | undefined>();
   const [isJudgeModalOpen, setIsJudgeModalOpen] = useState<boolean>(false);
+  const [isDrillModalOpen, setIsDrillModalOpen] = useState<boolean>(false);
   const [history, setHistory] = useState<{ text: string; score: number; level: string; time: string }[]>([]);
 
   const t = TRANSLATIONS[lang];
@@ -67,6 +69,13 @@ export function App() {
     setLang((prev) => (prev === 'en' ? 'hi' : 'en'));
   };
 
+  const handleTextChange = (newText: string) => {
+    setInputText(newText);
+    const res = decode(newText);
+    setVerdict(res);
+    setSelectedTactic(undefined);
+  };
+
   const runDecode = (textToDecode: string) => {
     if (!textToDecode.trim()) return;
     const res = decode(textToDecode);
@@ -99,8 +108,10 @@ export function App() {
     runDecode(sample.text);
   };
 
-  const handleDecodeClick = () => {
-    runDecode(inputText);
+  const handleDecodeClick = (overrideText?: string) => {
+    const target = typeof overrideText === 'string' ? overrideText : inputText;
+    setInputText(target);
+    runDecode(target);
   };
 
   return (
@@ -119,6 +130,7 @@ export function App() {
         audioMuted={audioMuted}
         onToggleAudio={handleToggleAudio}
         onOpenJudgeGuide={() => setIsJudgeModalOpen(true)}
+        onOpenDrill={() => setIsDrillModalOpen(true)}
         lang={lang}
         onToggleLang={handleToggleLang}
       />
@@ -220,7 +232,7 @@ export function App() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <MessageInput
               text={inputText}
-              onChange={setInputText}
+              onChange={handleTextChange}
               onDecode={handleDecodeClick}
               onSelectSample={handleSelectSample}
               lang={lang}
@@ -374,6 +386,13 @@ export function App() {
       <JudgeCheatSheetModal
         isOpen={isJudgeModalOpen}
         onClose={() => setIsJudgeModalOpen(false)}
+      />
+
+      {/* 60-Second Cognitive Immunity Speed Drill Modal */}
+      <CognitiveImmunityDrillModal
+        isOpen={isDrillModalOpen}
+        onClose={() => setIsDrillModalOpen(false)}
+        lang={lang}
       />
     </div>
   );

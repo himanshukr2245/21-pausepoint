@@ -1,4 +1,4 @@
-import { CheckCircle, AlertTriangle, ShieldX, Link2 } from 'lucide-react';
+import { CheckCircle, AlertTriangle, ShieldX, Link2, AlertOctagon } from 'lucide-react';
 import type { LinkReport } from '../engine';
 import { type Language, TRANSLATIONS } from '../lib/i18n';
 
@@ -24,6 +24,10 @@ export const LinkXray = ({ links, lang = 'en' }: LinkXrayProps) => {
         {links.map((link, idx) => {
           const isDanger = link.risk >= 40;
           const isWarning = link.risk > 0 && link.risk < 40;
+          const isAdult = link.flags.some((f) => f.flag === 'adult-content');
+          const isGambling = link.flags.some((f) => f.flag === 'illegal-gambling');
+          const isApk = link.flags.some((f) => f.flag === 'apk');
+          const isSpoof = link.flags.some((f) => f.flag === 'brand-in-name' || f.flag === 'lookalike');
 
           return (
             <div
@@ -66,61 +70,140 @@ export const LinkXray = ({ links, lang = 'en' }: LinkXrayProps) => {
                   </code>
                 </div>
 
-                {link.official ? (
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      padding: '0.2rem 0.6rem',
-                      borderRadius: 'var(--radius-pill)',
-                      background: 'var(--color-success-bg)',
-                      color: 'var(--color-success-fg)',
-                      border: '1px solid var(--color-success-border)',
-                    }}
-                  >
-                    <CheckCircle size={13} />
-                    {t.officialDomainVerified}
-                  </span>
-                ) : isDanger ? (
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      padding: '0.2rem 0.6rem',
-                      borderRadius: 'var(--radius-pill)',
-                      background: 'var(--color-danger-bg)',
-                      color: 'var(--color-danger-fg)',
-                      border: '1px solid var(--color-danger-border)',
-                    }}
-                  >
-                    <ShieldX size={13} />
-                    {t.deceptiveHighRisk} ({t.threatScore} {link.risk})
-                  </span>
-                ) : (
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      padding: '0.2rem 0.6rem',
-                      borderRadius: 'var(--radius-pill)',
-                      background: 'var(--color-warning-bg)',
-                      color: 'var(--color-warning-fg)',
-                      border: '1px solid var(--color-warning-border)',
-                    }}
-                  >
-                    <AlertTriangle size={13} />
-                    {t.unverifiedLink} ({t.threatScore} {link.risk})
-                  </span>
-                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                  {isAdult && (
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: 'var(--radius-pill)',
+                        background: 'rgba(239, 68, 68, 0.15)',
+                        color: 'var(--color-danger-fg)',
+                        border: '1px solid var(--color-danger-border)',
+                      }}
+                    >
+                      <AlertOctagon size={12} />
+                      {lang === 'hi' ? 'वयस्क सामग्री (DoT प्रतिबंधित)' : 'Adult Content (DoT Blocked)'}
+                    </span>
+                  )}
+
+                  {isGambling && (
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: 'var(--radius-pill)',
+                        background: 'rgba(245, 158, 11, 0.15)',
+                        color: 'var(--color-warning-fg)',
+                        border: '1px solid var(--color-warning-border)',
+                      }}
+                    >
+                      🎰 {lang === 'hi' ? 'अवैध सट्टेबाजी / गैंबलिंग' : 'Illegal Betting Vector'}
+                    </span>
+                  )}
+
+                  {isApk && (
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: 'var(--radius-pill)',
+                        background: 'rgba(239, 68, 68, 0.2)',
+                        color: 'var(--color-danger-fg)',
+                        border: '1px solid var(--color-danger)',
+                      }}
+                    >
+                      📱 {lang === 'hi' ? 'खतरनाक एपीके डाउनलोड' : 'Dangerous APK Trojan'}
+                    </span>
+                  )}
+
+                  {isSpoof && (
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.3rem',
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: 'var(--radius-pill)',
+                        background: 'rgba(239, 68, 68, 0.2)',
+                        color: 'var(--color-danger)',
+                        border: '1px solid var(--color-danger)',
+                      }}
+                    >
+                      🎭 {lang === 'hi' ? 'नकली ब्रांड डोमेन' : 'Brand Typosquatting'}
+                    </span>
+                  )}
+
+                  {link.official ? (
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        padding: '0.2rem 0.6rem',
+                        borderRadius: 'var(--radius-pill)',
+                        background: 'var(--color-success-bg)',
+                        color: 'var(--color-success-fg)',
+                        border: '1px solid var(--color-success-border)',
+                      }}
+                    >
+                      <CheckCircle size={13} />
+                      {t.officialDomainVerified}
+                    </span>
+                  ) : isDanger ? (
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        padding: '0.2rem 0.6rem',
+                        borderRadius: 'var(--radius-pill)',
+                        background: 'var(--color-danger-bg)',
+                        color: 'var(--color-danger-fg)',
+                        border: '1px solid var(--color-danger-border)',
+                      }}
+                    >
+                      <ShieldX size={13} />
+                      {t.deceptiveHighRisk} ({t.threatScore} {link.risk})
+                    </span>
+                  ) : (
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        padding: '0.2rem 0.6rem',
+                        borderRadius: 'var(--radius-pill)',
+                        background: 'var(--color-warning-bg)',
+                        color: 'var(--color-warning-fg)',
+                        border: '1px solid var(--color-warning-border)',
+                      }}
+                    >
+                      <AlertTriangle size={13} />
+                      {t.unverifiedLink} ({t.threatScore} {link.risk})
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Real Registrable Destination Callout */}
