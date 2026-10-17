@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Lock, Unlock } from 'lucide-react';
 import { playTick } from '../lib/audio';
+import { type Language, TRANSLATIONS } from '../lib/i18n';
 
 interface PauseGateProps {
   isDanger: boolean;
+  lang?: Language;
 }
 
-export const PauseGate = ({ isDanger }: PauseGateProps) => {
+export const PauseGate = ({ isDanger, lang = 'en' }: PauseGateProps) => {
   const [secondsLeft, setSecondsLeft] = useState(10);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [acknowledged, setAcknowledged] = useState(false);
+  const t = TRANSLATIONS[lang];
 
   useEffect(() => {
     if (!isDanger) return;
@@ -65,12 +68,12 @@ export const PauseGate = ({ isDanger }: PauseGateProps) => {
           </div>
           <div>
             <h4 style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--color-fg)' }}>
-              The 10-Second Cognitive Firewall Gate
+              {t.pauseGateTitle}
             </h4>
             <p style={{ fontSize: '0.78rem', color: 'var(--color-fg-muted)' }}>
               {isUnlocked
-                ? 'Countdown complete. You may now evaluate rationally.'
-                : `Forced pause in progress — button locked for ${secondsLeft}s`}
+                ? (lang === 'hi' ? 'उलझन समाप्त। अब आप शांत दिमाग से सोच सकते हैं।' : 'Countdown complete. You may now evaluate rationally.')
+                : `${t.pauseGateSub} (${secondsLeft}s)`}
             </p>
           </div>
         </div>
@@ -87,7 +90,7 @@ export const PauseGate = ({ isDanger }: PauseGateProps) => {
             border: `1px solid ${isUnlocked ? 'var(--color-success-border)' : 'var(--color-danger-border)'}`,
           }}
         >
-          {isUnlocked ? 'UNLOCKED' : `00:${secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}`}
+          {isUnlocked ? t.pauseGateUnlocked : `00:${secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}`}
         </div>
       </div>
 
@@ -101,7 +104,7 @@ export const PauseGate = ({ isDanger }: PauseGateProps) => {
           borderRadius: 'var(--radius-sm)',
         }}
       >
-        <strong>Why this lock exists:</strong> Attackers use acute urgency and fear to trigger your brain's amygdala and suppress logical reasoning. This 10-second forced pause breaks the emotional hijack so your rational judgment takes over.
+        {t.pauseGateReason}
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
@@ -127,7 +130,7 @@ export const PauseGate = ({ isDanger }: PauseGateProps) => {
             transition: 'all 0.15s ease',
           }}
         >
-          {acknowledged ? 'Risk Acknowledged' : 'I Understand The Risk (Continue Anyway)'}
+          {acknowledged ? t.riskAcknowledged : t.understandRisk}
         </button>
       </div>
     </div>

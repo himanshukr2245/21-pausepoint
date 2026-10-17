@@ -1,43 +1,73 @@
-import { AlertOctagon, AlertTriangle, ShieldCheck, Info } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { AlertOctagon, AlertTriangle, ShieldCheck, Info, Volume2, Square } from 'lucide-react';
 import type { Verdict } from '../engine';
+import { type Language, TRANSLATIONS } from '../lib/i18n';
+import { speakVerdict, stopSpeaking } from '../lib/speech';
+import { playTick } from '../lib/audio';
 
 interface VerdictBarProps {
   verdict: Verdict;
+  lang?: Language;
 }
 
-export const VerdictBar = ({ verdict }: VerdictBarProps) => {
+export const VerdictBar = ({ verdict, lang = 'en' }: VerdictBarProps) => {
   const { score, level, headline } = verdict;
+  const [speaking, setSpeaking] = useState(false);
+  const t = TRANSLATIONS[lang];
+
+  useEffect(() => {
+    // If verdict changes, stop previous speech
+    stopSpeaking();
+    setSpeaking(false);
+  }, [verdict]);
+
+  const handleToggleSpeak = () => {
+    playTick();
+    if (speaking) {
+      stopSpeaking();
+      setSpeaking(false);
+    } else {
+      speakVerdict(verdict, lang, () => setSpeaking(false));
+      setSpeaking(true);
+    }
+  };
 
   const levelConfig = {
     danger: {
-      badge: 'CRITICAL RISK',
-      title: 'STOP — HIGH THREAT DETECTED',
+      badge: lang === 'hi' ? 'अत्यंत खतरनाक' : 'CRITICAL RISK',
+      title: lang === 'hi' ? 'रुकें — बड़ा खतरा पाया गया' : 'STOP — HIGH THREAT DETECTED',
       icon: AlertOctagon,
       barColor: 'var(--color-danger)',
       bg: 'var(--color-danger-bg)',
       border: 'var(--color-danger-border)',
       fg: 'var(--color-danger-fg)',
-      description: 'Multiple active social engineering and financial manipulation triggers identified.',
+      description: lang === 'hi'
+        ? 'कई सक्रिय मनोवैज्ञानिक दबाव और वित्तीय धोखे के संकेत पहचाने गए।'
+        : 'Multiple active social engineering and financial manipulation triggers identified.',
     },
     suspicious: {
-      badge: 'CAUTION',
-      title: 'PAUSE — VERIFY BEFORE ACTING',
+      badge: lang === 'hi' ? 'सतर्क रहें' : 'CAUTION',
+      title: lang === 'hi' ? 'ठहरें — कदम उठाने से पहले जांचें' : 'PAUSE — VERIFY BEFORE ACTING',
       icon: AlertTriangle,
       barColor: 'var(--color-warning)',
       bg: 'var(--color-warning-bg)',
       border: 'var(--color-warning-border)',
       fg: 'var(--color-warning-fg)',
-      description: 'Suspicious psychological triggers or unverified channels detected.',
+      description: lang === 'hi'
+        ? 'संदिग्ध मनोवैज्ञानिक दबाव या अपुष्ट चैनल के संकेत।'
+        : 'Suspicious psychological triggers or unverified channels detected.',
     },
     low: {
-      badge: 'MINIMAL RISK',
-      title: 'NO STRONG RED FLAGS DETECTED',
+      badge: lang === 'hi' ? 'न्यूनतम जोखिम' : 'MINIMAL RISK',
+      title: lang === 'hi' ? 'कोई बड़ा संदिग्ध संकेत नहीं मिला' : 'NO STRONG RED FLAGS DETECTED',
       icon: ShieldCheck,
       barColor: 'var(--color-success)',
       bg: 'var(--color-success-bg)',
       border: 'var(--color-success-border)',
       fg: 'var(--color-success-fg)',
-      description: 'Standard informational communication pattern without pressure triggers.',
+      description: lang === 'hi'
+        ? 'सामान्य सूचनात्मक संदेश का प्रारूप।'
+        : 'Standard informational communication pattern without pressure triggers.',
     },
   }[level];
 
@@ -55,6 +85,7 @@ export const VerdictBar = ({ verdict }: VerdictBarProps) => {
         display: 'flex',
         flexDirection: 'column',
         gap: '1rem',
+        position: 'relative',
       }}
     >
       <div
@@ -109,36 +140,71 @@ export const VerdictBar = ({ verdict }: VerdictBarProps) => {
           </div>
         </div>
 
-        {/* Threat Score Gauge */}
-        <div
-          className="verdict-score-badge"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            background: 'var(--color-surface)',
-            padding: '0.5rem 1rem',
-            borderRadius: 'var(--radius-pill)',
-            border: '1px solid var(--color-border)',
-          }}
-        >
-          <span style={{ fontSize: '0.78rem', color: 'var(--color-fg-muted)', fontWeight: 600 }}>
-            THREAT SCORE
-          </span>
-          <span
+        {/* Action Controls & Threat Score Gauge */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+          {/* Audio Readout Assistant for Senior Citizens */}
+          <button
+            onClick={handleToggleSpeak}
             style={{
-              fontSize: '1.4rem',
-              fontWeight: 800,
-              fontFamily: 'var(--font-mono)',
-              color: levelConfig.barColor,
-              lineHeight: 1,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              padding: '0.45rem 0.85rem',
+              borderRadius: 'var(--radius-pill)',
+              border: `1px solid ${speaking ? 'var(--color-brand)' : 'var(--color-border)'}`,
+              background: speaking ? 'var(--color-brand)' : 'var(--color-surface)',
+              color: speaking ? 'var(--color-brand-fg)' : 'var(--color-fg)',
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: 'var(--shadow-sm)',
+              transition: 'all 0.15s ease',
+            }}
+            title={speaking ? t.stopSpeakingBtn : t.speakBtn}
+          >
+            {speaking ? (
+              <>
+                <Square size={14} fill="currentColor" />
+                <span>{t.stopSpeakingBtn}</span>
+              </>
+            ) : (
+              <>
+                <Volume2 size={15} />
+                <span>{t.speakBtn}</span>
+              </>
+            )}
+          </button>
+
+          <div
+            className="verdict-score-badge"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              background: 'var(--color-surface)',
+              padding: '0.5rem 1rem',
+              borderRadius: 'var(--radius-pill)',
+              border: '1px solid var(--color-border)',
             }}
           >
-            {score}
-            <span style={{ fontSize: '0.85rem', color: 'var(--color-fg-muted)', fontWeight: 500 }}>
-              /100
+            <span style={{ fontSize: '0.78rem', color: 'var(--color-fg-muted)', fontWeight: 600 }}>
+              {t.threatScore}
             </span>
-          </span>
+            <span
+              style={{
+                fontSize: '1.4rem',
+                fontWeight: 800,
+                fontFamily: 'var(--font-mono)',
+                color: levelConfig.barColor,
+                lineHeight: 1,
+              }}
+            >
+              {score}
+              <span style={{ fontSize: '0.85rem', color: 'var(--color-fg-muted)', fontWeight: 500 }}>
+                /100
+              </span>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -178,9 +244,7 @@ export const VerdictBar = ({ verdict }: VerdictBarProps) => {
         }}
       >
         <Info size={14} style={{ flexShrink: 0 }} />
-        <span>
-          <strong>Honesty Rule:</strong> PausePoint never labels anything "safe". Even clean messages must be verified if they request credentials or financial transfers.
-        </span>
+        <span>{t.honestyRule}</span>
       </div>
     </div>
   );

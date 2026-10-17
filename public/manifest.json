@@ -1,0 +1,26 @@
+{
+  "name": "PausePoint — The Manipulation Decoder",
+  "short_name": "PausePoint",
+  "description": "Instant, client-side, 100% offline manipulation & social engineering decoder. Pause. Verify. Then act.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0d14",
+  "theme_color": "#0284c7",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

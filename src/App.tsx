@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { decode, type Verdict } from './engine';
 import { SAMPLE_MESSAGES, type SampleMessage } from './samples';
 import { playTick, playDangerAlert, playCleanChime, isMuted, setMuted } from './lib/audio';
+import { type Language, TRANSLATIONS } from './lib/i18n';
 
 import { Navbar } from './components/Navbar';
 import { MessageInput } from './components/MessageInput';
@@ -18,11 +19,14 @@ import { Sparkles, History } from 'lucide-react';
 export function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [audioMuted, setAudioMuted] = useState<boolean>(false);
+  const [lang, setLang] = useState<Language>('en');
   const [inputText, setInputText] = useState<string>(SAMPLE_MESSAGES[0].text);
   const [verdict, setVerdict] = useState<Verdict>(() => decode(SAMPLE_MESSAGES[0].text));
   const [selectedTactic, setSelectedTactic] = useState<string | undefined>();
   const [isJudgeModalOpen, setIsJudgeModalOpen] = useState<boolean>(false);
   const [history, setHistory] = useState<{ text: string; score: number; level: string; time: string }[]>([]);
+
+  const t = TRANSLATIONS[lang];
 
   // Initialize theme and audio
   useEffect(() => {
@@ -31,6 +35,18 @@ export function App() {
 
   useEffect(() => {
     setAudioMuted(isMuted());
+  }, []);
+
+  // Web Share Target & Deep Link Support
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const shared = params.get('text') || params.get('url') || params.get('title');
+      if (shared && shared.trim()) {
+        setInputText(shared);
+        runDecode(shared);
+      }
+    }
   }, []);
 
   const handleToggleTheme = () => {
@@ -45,6 +61,10 @@ export function App() {
     const next = !audioMuted;
     setAudioMuted(next);
     setMuted(next);
+  };
+
+  const handleToggleLang = () => {
+    setLang((prev) => (prev === 'en' ? 'hi' : 'en'));
   };
 
   const runDecode = (textToDecode: string) => {
@@ -99,6 +119,8 @@ export function App() {
         audioMuted={audioMuted}
         onToggleAudio={handleToggleAudio}
         onOpenJudgeGuide={() => setIsJudgeModalOpen(true)}
+        lang={lang}
+        onToggleLang={handleToggleLang}
       />
 
       <main
@@ -133,7 +155,7 @@ export function App() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: 4 }}>
               <span style={{ fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-brand)' }}>
-                Session 1: Human Firewall
+                {lang === 'hi' ? 'सत्र 1: कॉग्निटिव फायरवॉल' : 'Session 1: Human Firewall'}
               </span>
               <span style={{ color: 'var(--color-border)' }}>•</span>
               <span style={{ fontSize: '0.72rem', color: 'var(--color-fg-muted)' }}>
@@ -141,10 +163,14 @@ export function App() {
               </span>
             </div>
             <h2 className="hero-headline" style={{ fontSize: '1.35rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--color-fg)' }}>
-              Unphishable: Exposing your exposure, before hackers do.
+              {lang === 'hi' 
+                ? 'अनफ़िशेबल: हैकर्स के वार करने से पहले उनकी चाल को बेनकाब करें।' 
+                : 'Unphishable: Exposing your exposure, before hackers do.'}
             </h2>
             <p style={{ fontSize: '0.85rem', color: 'var(--color-fg-muted)', marginTop: 2 }}>
-              Paste any SMS, WhatsApp alert, or link. In under a second, discover the exact psychological levers, known Indian scams, and broken links.
+              {lang === 'hi'
+                ? 'कोई भी एसएमएस, व्हाट्सएप संदेश या लिंक डालें। 1 सेकंड में मनोवैज्ञानिक दबाव, धोखाधड़ी के पैटर्न और फर्जी लिंक की पहचान करें।'
+                : 'Paste any SMS, WhatsApp alert, or link. In under a second, discover the exact psychological levers, known Indian scams, and broken links.'}
             </p>
           </div>
 
@@ -197,6 +223,7 @@ export function App() {
               onChange={setInputText}
               onDecode={handleDecodeClick}
               onSelectSample={handleSelectSample}
+              lang={lang}
             />
 
             {/* Session History Quick Drawer */}
@@ -214,7 +241,7 @@ export function App() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-fg-muted)' }}>
                   <History size={14} />
-                  <span>RECENT DECODE RUNS IN THIS SESSION</span>
+                  <span>{t.recentRunsTitle}</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                   {history.map((h, i) => (
@@ -257,15 +284,15 @@ export function App() {
                 lineHeight: 1.5,
               }}
             >
-              <strong style={{ color: 'var(--color-fg)' }}>How PausePoint Works: </strong>
-              Analyzes incoming messages across 11 psychological levers (Urgency, Fear, Authority, Secrecy, etc.), matches against 9 known Indian scam playbooks, decomposes URLs down to registrable roots, and provides actionable verification steps. Zero AI hallucination, 100% deterministic, explainable forensics.
+              <strong style={{ color: 'var(--color-fg)' }}>{t.howItWorksTitle} </strong>
+              {t.howItWorksBody}
             </div>
           </div>
 
           {/* Right Column: Manipulation X-Ray Result */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {/* 1. Verdict Banner */}
-            <VerdictBar verdict={verdict} />
+            <VerdictBar verdict={verdict} lang={lang} />
 
             {/* 2. Highlighted Message X-Ray */}
             <div
@@ -284,11 +311,11 @@ export function App() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <Sparkles size={16} style={{ color: 'var(--color-brand)' }} />
                   <h3 style={{ fontSize: '0.95rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                    Manipulation X-Ray (Highlighted Triggers)
+                    {t.manipulationXray}
                   </h3>
                 </div>
                 <span style={{ fontSize: '0.75rem', color: 'var(--color-fg-muted)' }}>
-                  {verdict.highlights.length} trigger phrases detected
+                  {verdict.highlights.length} {t.triggersDetected}
                 </span>
               </div>
 
@@ -300,23 +327,24 @@ export function App() {
             </div>
 
             {/* 3. 10-Second Cognitive Pause Gate (shown on danger verdicts) */}
-            <PauseGate isDanger={verdict.level === 'danger'} />
+            <PauseGate isDanger={verdict.level === 'danger'} lang={lang} />
 
             {/* 4. Matched Playbooks */}
-            <PlaybookCard playbooks={verdict.playbooks} />
+            <PlaybookCard playbooks={verdict.playbooks} lang={lang} />
 
             {/* 5. Link X-Ray Analysis */}
-            <LinkXray links={verdict.links} />
+            <LinkXray links={verdict.links} lang={lang} />
 
             {/* 6. Psychological Tactic Levers */}
             <TacticCards
               tactics={verdict.tactics}
               selectedTactic={selectedTactic}
               onSelectTactic={setSelectedTactic}
+              lang={lang}
             />
 
             {/* 7. Verify Ladder Protocol */}
-            <VerifyLadder verdict={verdict} rawText={inputText} />
+            <VerifyLadder verdict={verdict} rawText={inputText} lang={lang} />
           </div>
         </div>
       </main>

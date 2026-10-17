@@ -108,3 +108,6 @@ export function playCleanChime(): void {
   osc.start(now);
   osc.stop(now + 0.35);
 }
+
+export const playAlert = playDangerAlert;
+export const playSuccess = playCleanChime;

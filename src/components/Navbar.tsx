@@ -1,5 +1,6 @@
-import { Moon, Sun, Volume2, VolumeX, BookOpen, WifiOff } from 'lucide-react';
+import { Moon, Sun, Volume2, VolumeX, BookOpen, WifiOff, Languages } from 'lucide-react';
 import { playTick } from '../lib/audio';
+import { type Language, TRANSLATIONS } from '../lib/i18n';
 
 interface NavbarProps {
   theme: 'light' | 'dark';
@@ -7,6 +8,8 @@ interface NavbarProps {
   audioMuted: boolean;
   onToggleAudio: () => void;
   onOpenJudgeGuide: () => void;
+  lang: Language;
+  onToggleLang: () => void;
 }
 
 export const Navbar = ({
@@ -15,7 +18,11 @@ export const Navbar = ({
   audioMuted,
   onToggleAudio,
   onOpenJudgeGuide,
+  lang,
+  onToggleLang,
 }: NavbarProps) => {
+  const t = TRANSLATIONS[lang];
+
   return (
     <header
       style={{
@@ -63,7 +70,7 @@ export const Navbar = ({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
               <h1 style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--color-fg)' }}>
-                PausePoint
+                {t.appTitle}
               </h1>
               <span
                 style={{
@@ -76,17 +83,43 @@ export const Navbar = ({
                   border: '1px solid rgba(2, 132, 199, 0.25)',
                 }}
               >
-                DECODER
+                {t.appSubtitle}
               </span>
             </div>
             <p className="navbar-tagline" style={{ fontSize: '0.75rem', color: 'var(--color-fg-muted)', fontWeight: 500 }}>
-              Pause. Verify. Then act. — <span style={{ opacity: 0.85 }}>Human Firewall Hackathon</span>
+              {t.tagline} — <span style={{ opacity: 0.85 }}>Human Firewall Hackathon</span>
             </p>
           </div>
         </div>
 
         {/* Right Action Tools */}
-        <div className="navbar-tools" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div className="navbar-tools" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+          {/* Language Switcher */}
+          <button
+            onClick={() => {
+              playTick();
+              onToggleLang();
+            }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+              padding: '0.38rem 0.7rem',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--color-surface-2)',
+              border: '1px solid var(--color-border)',
+              color: 'var(--color-fg)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+            title={lang === 'en' ? 'हिन्दी में बदलें (Switch to Hindi)' : 'Switch to English'}
+          >
+            <Languages size={14} color="var(--color-brand)" />
+            <span>{lang === 'en' ? 'हिन्दी' : 'English'}</span>
+          </button>
+
           {/* Offline & Privacy Badge */}
           <div
             style={{
@@ -114,7 +147,7 @@ export const Navbar = ({
               }}
             />
             <WifiOff size={13} style={{ color: 'var(--color-fg-muted)', flexShrink: 0 }} />
-            <span className="navbar-privacy-label">Offline & Private</span>
+            <span className="navbar-privacy-label">{t.offlineBadge}</span>
           </div>
 
           {/* Judge Demo Guide Popover Trigger */}
@@ -138,7 +171,7 @@ export const Navbar = ({
             }}
           >
             <BookOpen size={14} />
-            Judge Demo Kit
+            {t.judgeKitBtn}
           </button>
 
           {/* Sound Toggle */}

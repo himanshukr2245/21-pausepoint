@@ -1,19 +1,22 @@
 import { CheckCircle, AlertTriangle, ShieldX, Link2 } from 'lucide-react';
 import type { LinkReport } from '../engine';
+import { type Language, TRANSLATIONS } from '../lib/i18n';
 
 interface LinkXrayProps {
   links: LinkReport[];
+  lang?: Language;
 }
 
-export const LinkXray = ({ links }: LinkXrayProps) => {
+export const LinkXray = ({ links, lang = 'en' }: LinkXrayProps) => {
   if (links.length === 0) return null;
+  const t = TRANSLATIONS[lang];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         <Link2 size={18} style={{ color: 'var(--color-brand)' }} />
         <h3 style={{ fontSize: '0.95rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-          Link Deep X-Ray Analysis ({links.length})
+          {t.linkXrayTitle} ({links.length})
         </h3>
       </div>
 
@@ -79,7 +82,7 @@ export const LinkXray = ({ links }: LinkXrayProps) => {
                     }}
                   >
                     <CheckCircle size={13} />
-                    Verified Official Domain
+                    {t.officialDomainVerified}
                   </span>
                 ) : isDanger ? (
                   <span
@@ -97,7 +100,7 @@ export const LinkXray = ({ links }: LinkXrayProps) => {
                     }}
                   >
                     <ShieldX size={13} />
-                    Deceptive / High Risk (Score {link.risk})
+                    {t.deceptiveHighRisk} ({t.threatScore} {link.risk})
                   </span>
                 ) : (
                   <span
@@ -115,7 +118,7 @@ export const LinkXray = ({ links }: LinkXrayProps) => {
                     }}
                   >
                     <AlertTriangle size={13} />
-                    Unverified Link (Score {link.risk})
+                    {t.unverifiedLink} ({t.threatScore} {link.risk})
                   </span>
                 )}
               </div>
@@ -130,7 +133,7 @@ export const LinkXray = ({ links }: LinkXrayProps) => {
                   gap: '0.5rem',
                 }}
               >
-                <span>Real destination server:</span>
+                <span>{t.realServerDest}</span>
                 <strong
                   style={{
                     color: link.official ? 'var(--color-success-fg)' : 'var(--color-danger)',
