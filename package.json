@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "node --test test/engine.test.ts",
+    "test": "node --test test/engine.test.ts test/golden.test.ts",
     "lint": "oxlint",
+    "check:fast": "tsc -b && oxlint",
+    "check": "npm run check:fast && npm test && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
